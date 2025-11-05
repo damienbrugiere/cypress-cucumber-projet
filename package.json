@@ -1,0 +1,25 @@
+{
+  "name": "cypress-cucumber-projet",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "open": "npx cypress open",
+    "exec-slow": "npx cypress run --env cucumberTags=\"@slow\" --browser chrome --headless --no-runner-ui"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@badeball/cypress-cucumber-preprocessor": "^23.2.1",
+    "@bahmutov/cypress-esbuild-preprocessor": "^2.2.7",
+    "@types/node": "^24.10.0",
+    "cross-env": "^10.1.0",
+    "cypress": "^15.5.0",
+    "esbuild": "^0.25.12",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "fluent-ffmpeg": "^2.1.3"
+  }
+}
