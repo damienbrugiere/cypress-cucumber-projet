@@ -5,7 +5,7 @@ import createEsbuildPlugin from "@badeball/cypress-cucumber-preprocessor/esbuild
 
 export default defineConfig({
   e2e: {
-    baseUrl: "https://google.com",
+    baseUrl: "http://localhost:4200",
     specPattern: "**/*.feature",
     video: true,
     viewportWidth: 1920,

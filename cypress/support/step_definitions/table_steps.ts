@@ -1,4 +1,4 @@
-import { When, Then } from "@badeball/cypress-cucumber-preprocessor";
+import { When, Then, DataTable } from "@badeball/cypress-cucumber-preprocessor";
 
 // Vérification du nombre de lignes
 Then("le tableau devrait avoir {int} ligne(s)", (lineNumber: number) => {
@@ -278,4 +278,41 @@ Then("l'info bulle de la ligne {int} colonne {int} devrait afficher {string}", (
 // Bouton prorata
 When("je clique sur le bouton prorata {int} de la ligne {int}", (buttonIndex: number, rowIndex: number) => {
   cy.get('.datatable-body-row').eq(rowIndex).find('.input-uom ui-button').eq(buttonIndex).click({ force: true });
+});
+
+// Vérification du contenu du tableau avec DataTable
+Then("le tableau devrait contenir", (dataTable: DataTable) => {
+  const rows = dataTable.hashes(); // Récupère les lignes avec les en-têtes comme clés
+  const headers = dataTable.raw()[0]; // Récupère les en-têtes
+  
+  // Pour chaque ligne de la DataTable
+  rows.forEach((row, rowIndex) => {
+    // Pour chaque colonne de la ligne
+    headers.forEach((header) => {
+      const expectedValue = row[header];
+      
+      // Trouver l'index de la colonne en fonction du nom de l'en-tête
+      cy.get('.datatable-header-cell-label').then($headers => {
+        let columnIndex = -1;
+        
+        // Chercher l'index de la colonne correspondant à l'en-tête
+        $headers.each((index, element) => {
+          if (element.textContent?.trim().toLowerCase() === header.toLowerCase()) {
+            columnIndex = index;
+          }
+        });
+        
+        // Vérifier la valeur de la cellule
+        if (columnIndex !== -1) {
+          cy.get('.datatable-body-row')
+            .eq(rowIndex)
+            .find('.datatable-body-cell')
+            .eq(columnIndex)
+            .should('contain', expectedValue);
+        } else {
+          throw new Error(`Colonne "${header}" non trouvée dans les en-têtes du tableau`);
+        }
+      });
+    });
+  });
 });
